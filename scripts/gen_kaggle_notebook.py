@@ -42,8 +42,8 @@ def writefile_cell(filename: str, content: str) -> dict:
 KAGGLE_CONFIG = """seed: 42
 
 paths:
-  raw_train_csv: /kaggle/input/jigsaw-unintended-bias-in-toxicity-classification/train.csv
-  raw_test_csv: /kaggle/input/jigsaw-unintended-bias-in-toxicity-classification/test.csv
+  raw_train_csv: /kaggle/input/competitions/jigsaw-unintended-bias-in-toxicity-classification/train.csv
+  raw_test_csv: /kaggle/input/competitions/jigsaw-unintended-bias-in-toxicity-classification/test.csv
   processed_dir: /kaggle/working/data/processed
   model_dir: /kaggle/working/models
   reports_dir: /kaggle/working/reports
@@ -82,7 +82,9 @@ transformer:
   eval_batch_size: 64
   lr: 2.0e-5
   warmup_ratio: 0.05
-  epochs: 2
+  epochs: 1   # 1-2 is the spec's range; start with 1 for a faster real
+              # result (~3.5-4.5h vs ~7-9h) -- bump to 2 for a rerun if
+              # time/GPU-quota allows once this arm's numbers are in.
   weight_decay: 0.01
   fp16: true
   aux_loss_weight: 0.25
@@ -91,7 +93,7 @@ transformer:
   grad_accum_steps: 1
   max_grad_norm: 1.0
   log_every: 100
-  checkpoint_every_steps: 2000
+  checkpoint_every_steps: 3000   # overwrites a single _latest.pt -- see src/train.py
 """
 
 
@@ -123,8 +125,79 @@ and/or `weighting_scheme`, re-run that cell + the training cell, save a
 new notebook version per configuration so each run's output is preserved.
 """
         ),
-        md_cell("## 1. Install extra dependencies\n\n`torch`/`transformers` ship preinstalled on Kaggle GPU notebooks; this only adds what doesn't."),
+        md_cell(
+            "## 1. Install extra dependencies\n\n"
+            "`torch`/`transformers` ship preinstalled on Kaggle GPU notebooks. "
+            "The preinstalled torch build (observed: 2.10.0+cu128) has dropped "
+            "kernel support for Pascal-generation GPUs (sm_60, e.g. the P100 "
+            "Kaggle sometimes assigns) -- confirmed the hard way: `CUDA error: "
+            "no kernel image is available for execution on the device`, right "
+            "after `torch.zeros(..., device='cuda')`. `machine_shape` in "
+            "kernel-metadata.json did not reliably control which GPU an "
+            "API-pushed kernel gets, so instead of gambling on GPU assignment, "
+            "we detect the actual device's compute capability and reinstall a "
+            "torch/cu121 build (still spans Pascal through Hopper) only if the "
+            "preinstalled one can't run a kernel on this GPU."
+        ),
         code_cell("!pip install -q sentencepiece pyyaml\n"),
+        code_cell(
+            "import subprocess\n"
+            "import torch\n"
+            "\n"
+            "def cuda_actually_works() -> bool:\n"
+            "    if not torch.cuda.is_available():\n"
+            "        return False\n"
+            "    try:\n"
+            "        x = torch.zeros(4, device='cuda')\n"
+            "        _ = x + 1\n"
+            "        torch.cuda.synchronize()\n"
+            "        return True\n"
+            "    except Exception as e:\n"
+            "        print(f'CUDA smoke op failed on preinstalled torch: {e}')\n"
+            "        return False\n"
+            "\n"
+            "print('torch', torch.__version__, 'cuda build', torch.version.cuda)\n"
+            "if torch.cuda.is_available():\n"
+            "    print('device:', torch.cuda.get_device_name(0), torch.cuda.get_device_capability(0))\n"
+            "\n"
+            "if not cuda_actually_works():\n"
+            "    print('Reinstalling a broader-compatibility torch build (cu121)...')\n"
+            "    subprocess.run(\n"
+            "        ['pip', 'install', '-q', '--force-reinstall',\n"
+            "         'torch==2.4.1', '--index-url', 'https://download.pytorch.org/whl/cu121'],\n"
+            "        check=True,\n"
+            "    )\n"
+            "    # We don't use torchvision/torchaudio anywhere -- but they stay\n"
+            "    # pinned to the OLD torch build's version after the line above,\n"
+            "    # which breaks their compiled ops (torchvision::nms) against the\n"
+            "    # new torch, which in turn breaks transformers' DebertaV2Model\n"
+            "    # import (it probes torchvision at import time). Simplest fix:\n"
+            "    # remove what we don't need instead of chasing matched versions.\n"
+            "    subprocess.run(['pip', 'uninstall', '-y', '-q', 'torchvision', 'torchaudio'], check=True)\n"
+            "    # Verify via a FRESH subprocess, not this kernel's already-imported\n"
+            "    # torch module -- Python cannot cleanly reload a C-extension\n"
+            "    # module in-process, but train.py runs as its own subprocess\n"
+            "    # later anyway and will import the newly installed package fine\n"
+            "    # regardless of what this cell's `torch` object thinks.\n"
+            "    check = subprocess.run(\n"
+            "        ['python', '-c',\n"
+            "         \"import torch; x=torch.zeros(4, device='cuda'); y=x+1; torch.cuda.synchronize(); \"\n"
+            "         \"print('torch', torch.__version__, 'cuda build', torch.version.cuda); print('CUDA OK:', y)\"],\n"
+            "    )\n"
+            "    assert check.returncode == 0, 'CUDA still broken after torch reinstall -- needs manual investigation.'\n"
+            "else:\n"
+            "    print('Preinstalled torch already works on this GPU -- no reinstall needed.')\n"
+        ),
+        code_cell(
+            "import os\n"
+            "# Sanity check the data mount before spending any GPU time on it --\n"
+            "# API-pushed kernels mount competition data at\n"
+            "# /kaggle/input/competitions/<slug>/, NOT /kaggle/input/<slug>/ like\n"
+            "# the browser 'Add Data' flow does. Confirmed the hard way once.\n"
+            "for root, _, files in os.walk('/kaggle/input'):\n"
+            "    for f in files:\n"
+            "        print(os.path.join(root, f))\n"
+        ),
         md_cell(
             "## 2. Materialize the project's src/ modules\n\n"
             "Identical content to the local repo's `src/metrics.py`, `src/data.py`, "
@@ -146,10 +219,21 @@ new notebook version per configuration so each run's output is preserved.
         md_cell(
             "## 4. Smoke test (structural, ~1-2 min)\n\n"
             "Runs the full loop end-to-end on 300 rows before committing to a "
-            "multi-hour run -- catches config/schema mistakes cheaply. Safe to "
-            "skip once you've run it successfully once per notebook version."
+            "multi-hour run -- catches config/schema mistakes cheaply. Uses "
+            "`subprocess` + a raised exception (not a bare `!` shell call) "
+            "specifically so a failure here **halts the notebook** instead of "
+            "silently falling through to the multi-hour cell below -- a bare "
+            "`!python ...` returning nonzero does not stop batch execution on "
+            "its own, which would otherwise burn GPU quota on a broken run."
         ),
-        code_cell("!python train.py --config config.yaml --sample 300 --out-name smoketest\n"),
+        code_cell(
+            "import subprocess\n"
+            "r = subprocess.run(['python', 'train.py', '--config', 'config.yaml', "
+            "'--sample', '300', '--out-name', 'smoketest'])\n"
+            "if r.returncode != 0:\n"
+            "    raise RuntimeError('Smoke test failed (see output above) -- aborting before the full run.')\n"
+            "print('SMOKE TEST PASSED')\n"
+        ),
         md_cell(
             "## 5. Full training run\n\n"
             "This is the multi-hour cell. Metrics (overall AUC + the three bias "
@@ -159,7 +243,14 @@ new notebook version per configuration so each run's output is preserved.
             "Kaggle Dataset from the notebook's \"Save Version\" flow so it "
             "persists past the session."
         ),
-        code_cell("!python train.py --config config.yaml --out-name deberta_multitask\n"),
+        code_cell(
+            "import subprocess\n"
+            "r = subprocess.run(['python', 'train.py', '--config', 'config.yaml', "
+            "'--out-name', 'deberta_multitask'])\n"
+            "if r.returncode != 0:\n"
+            "    raise RuntimeError('Training run failed (see output above).')\n"
+            "print('TRAINING RUN COMPLETE')\n"
+        ),
         md_cell(
             "## 6. Copy results back into the local repo\n\n"
             "After downloading `/kaggle/working/reports/*.csv` from the Output "

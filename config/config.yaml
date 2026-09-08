@@ -43,8 +43,20 @@ aux_columns:
 
 baseline_tfidf:
   word_ngram_range: [1, 2]
+  # word_max_features / char_max_features: unused now -- src/baseline.py
+  # switched from a vocabulary-based TfidfVectorizer to
+  # HashingVectorizer+TfidfTransformer (fixed n_features=2**20 in code),
+  # since building an explicit vocabulary across 1.7M+ documents before
+  # pruning to max_features caused a MemoryError on this 8GB-RAM dev
+  # machine. Left here as a record of the original design, not read
+  # anywhere.
   word_max_features: 30000
-  char_ngram_range: [2, 5]
+  char_ngram_range: [2, 4]   # trimmed from [2, 5] -- another RAM-driven
+  # cut: char n-grams up to 5 over the full corpus (~1.7M docs, some up to
+  # ~1000 chars) produce close to a billion (doc, feature) instances,
+  # which alone doesn't fit in 8GB regardless of vectorizer choice. See
+  # src/baseline.py's default stratified-subsample sizing for the other
+  # half of this tradeoff.
   char_max_features: 30000
   C: 4.0
 

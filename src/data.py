@@ -178,10 +178,17 @@ def stratified_subsample(
         extra = pool.sample(n=min(need, len(pool)), random_state=int(rng.integers(0, 1_000_000)))
         topped_up.append(extra)
 
-    result = pd.concat(topped_up).drop_duplicates(subset=[df.columns[0]] if len(df.columns) else None)
-    # drop_duplicates on the id column if present, else on the whole row
-    if "id" in df.columns:
-        result = result.drop_duplicates(subset="id")
+    # Dedup by the ORIGINAL row index, not by column content. A row that
+    # mentions two rare subgroups (e.g. both "muslim" and "black") can get
+    # drawn independently by two different top-up iterations -- that's the
+    # only source of duplicates here, since each iteration already
+    # excludes `sample`'s own index. Deduping by content instead (e.g. by
+    # `comment_text`) is a bug, not a safety net: short comments repeat
+    # verbatim across a corpus this size ("Thanks!", "I agree.", ...), so
+    # content-based dedup collapsed a 200k-row request down to ~1,400 rows
+    # the one time this was tried.
+    result = pd.concat(topped_up)
+    result = result[~result.index.duplicated(keep="first")]
     return result.reset_index(drop=True)
 
 

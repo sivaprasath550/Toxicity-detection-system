@@ -20,10 +20,11 @@ import numpy as np
 import pandas as pd
 import yaml
 from scipy.sparse import hstack
-from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.feature_extraction.text import HashingVectorizer, TfidfTransformer
 from sklearn.linear_model import LogisticRegression
+from sklearn.pipeline import Pipeline
 
-from data import load_raw, train_val_split
+from data import load_raw, stratified_subsample, train_val_split
 from metrics import IDENTITY_COLUMNS, compute_bias_metrics
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -34,20 +35,43 @@ def load_config(path: Path = ROOT / "config" / "config.yaml") -> dict:
         return yaml.safe_load(f)
 
 
-def build_vectorizers(cfg: dict) -> tuple[TfidfVectorizer, TfidfVectorizer]:
-    word_vec = TfidfVectorizer(
-        analyzer="word",
-        ngram_range=tuple(cfg["baseline_tfidf"]["word_ngram_range"]),
-        max_features=cfg["baseline_tfidf"]["word_max_features"],
-        sublinear_tf=True,
-        strip_accents="unicode",
-    )
-    char_vec = TfidfVectorizer(
-        analyzer="char_wb",
-        ngram_range=tuple(cfg["baseline_tfidf"]["char_ngram_range"]),
-        max_features=cfg["baseline_tfidf"]["char_max_features"],
-        sublinear_tf=True,
-    )
+def build_vectorizers(cfg: dict) -> tuple[Pipeline, Pipeline]:
+    """HashingVectorizer -> TfidfTransformer, not plain TfidfVectorizer.
+
+    A vocabulary-based CountVectorizer/TfidfVectorizer has to build an
+    explicit {n-gram: index} dict across the WHOLE corpus before it can
+    prune down to `max_features` -- for char_wb (2,5) over 1.7M comments
+    (some up to ~1000 chars, see EDA) that intermediate vocabulary blows
+    past available RAM before pruning ever happens (hit this directly:
+    MemoryError inside sklearn's `_count_vocab`, ~40 minutes into a fit).
+    HashingVectorizer sidesteps this entirely -- it hashes each n-gram
+    straight into a fixed-size feature space with no vocabulary dict at
+    all, so memory is bounded by `n_features` and the corpus's total
+    non-zero count, not by how many distinct n-grams exist. `norm=None` +
+    a separate `TfidfTransformer` keeps the actual TF-IDF weighting (IDF
+    needs document frequencies, which HashingVectorizer alone can't give
+    you -- it has no notion of "this hash bucket = this term").
+    """
+    word_vec = Pipeline([
+        ("hash", HashingVectorizer(
+            analyzer="word",
+            ngram_range=tuple(cfg["baseline_tfidf"]["word_ngram_range"]),
+            n_features=2**20,
+            alternate_sign=False,
+            norm=None,
+        )),
+        ("tfidf", TfidfTransformer(sublinear_tf=True)),
+    ])
+    char_vec = Pipeline([
+        ("hash", HashingVectorizer(
+            analyzer="char_wb",
+            ngram_range=tuple(cfg["baseline_tfidf"]["char_ngram_range"]),
+            n_features=2**20,
+            alternate_sign=False,
+            norm=None,
+        )),
+        ("tfidf", TfidfTransformer(sublinear_tf=True)),
+    ])
     return word_vec, char_vec
 
 
@@ -61,8 +85,31 @@ def main(args: argparse.Namespace) -> None:
     df["comment_text"] = df["comment_text"].fillna("")
 
     if args.sample:
+        # Plain random subsample -- for quick, throwaway smoke runs only.
+        # Doesn't guarantee subgroup coverage, so its bias table can be noisy
+        # or NaN for rare subgroups.
         df = df.sample(n=min(args.sample, len(df)), random_state=cfg["seed"]).reset_index(drop=True)
         print(f"Subsampled to {len(df)} rows for a quick run (--sample {args.sample}).")
+    elif not args.full:
+        # Default: a stratified subsample (see src/data.py) rather than the
+        # full 1.8M rows. This is a disclosed, deliberate tradeoff for this
+        # dev machine's 8GB RAM -- HashingVectorizer avoids building an
+        # explicit vocabulary, but the final char-n-gram sparse matrix for
+        # the FULL corpus still needs to hold ~1 billion (doc, feature)
+        # instances in memory before it's compressed to CSR, which doesn't
+        # fit here regardless of vectorization strategy. Unlike a plain
+        # random subsample, stratified_subsample tops up every one of the
+        # 9 scored subgroups to a floor count, so the bias table stays
+        # meaningful at this size instead of going noisy/NaN on rare
+        # subgroups. Pass --full on a machine with more RAM (or on Kaggle)
+        # to use every row.
+        df = stratified_subsample(
+            df,
+            n=cfg["data"]["dev_subsample_size"],
+            seed=cfg["seed"],
+            min_per_subgroup=cfg["data"]["min_per_subgroup_dev"],
+        )
+        print(f"Stratified-subsampled to {len(df)} rows (RAM-constrained default; pass --full to use all rows).")
 
     train_df, val_df = train_val_split(df, val_size=cfg["data"]["val_size"], seed=cfg["seed"])
     print(f"train={len(train_df)} val={len(val_df)}")
@@ -121,6 +168,7 @@ def main(args: argparse.Namespace) -> None:
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--data", type=str, default=None, help="path to train.csv (default: config paths.raw_train_csv)")
-    parser.add_argument("--sample", type=int, default=None, help="subsample this many rows for a quick smoke run")
+    parser.add_argument("--sample", type=int, default=None, help="plain random subsample this many rows (quick smoke run only)")
+    parser.add_argument("--full", action="store_true", help="use every row (needs a fair amount of RAM -- see build_vectorizers docstring)")
     parser.add_argument("--save-model", action="store_true", help="pickle the fitted vectorizers + classifier")
     main(parser.parse_args())

@@ -35,7 +35,37 @@ class MultiTaskToxicityModel(nn.Module):
         super().__init__()
         self.use_multitask_heads = use_multitask_heads
         self.config = AutoConfig.from_pretrained(model_name)
-        self.encoder = AutoModel.from_pretrained(model_name, config=self.config)
+        # low_cpu_mem_usage=False: force the traditional (instantiate-then-
+        # load_state_dict) weight-loading path instead of accelerate's
+        # meta-device "materialize per-parameter" path, which transformers
+        # enables by default whenever accelerate is importable. That path
+        # is meant for models too large to instantiate twice in RAM -- not
+        # a concern at 184M params -- and it silently crashed mid-load
+        # (no Python traceback, just a dead subprocess) on a Kaggle T4
+        # GPU node with DeBERTa-v2's custom disentangled-attention modules.
+        # use_safetensors=True: on a torch build old enough to still support
+        # Pascal-generation GPUs (see the low_cpu_mem_usage note above --
+        # Kaggle can hand out a P100), transformers refuses to torch.load()
+        # a raw .bin checkpoint at all (a security gate that requires
+        # torch>=2.6) and raises rather than falling back on its own.
+        # Safetensors loading has no such restriction and Microsoft's
+        # official checkpoint ships both formats.
+        #
+        # torch_dtype=torch.float32: transformers can default to whatever
+        # dtype the checkpoint's config declares (some hub configs say
+        # float16) unless told otherwise. That silently breaks the
+        # autocast+GradScaler mixed-precision pattern in train.py, which
+        # requires FP32 master parameters -- confirmed the hard way via
+        # `ValueError: Attempting to unscale FP16 gradients` the moment
+        # backward() ran. autocast handles the fp16 compute internally;
+        # the stored parameters must stay fp32.
+        self.encoder = AutoModel.from_pretrained(
+            model_name,
+            config=self.config,
+            low_cpu_mem_usage=False,
+            use_safetensors=True,
+            torch_dtype=torch.float32,
+        )
         hidden = self.config.hidden_size
 
         self.dropout = nn.Dropout(dropout)

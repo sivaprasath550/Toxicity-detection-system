@@ -6,20 +6,27 @@ groups; this project measures that failure directly, tries several
 mitigations, and reports what worked, what didn't, and what the honest
 tradeoffs are.
 
-> **Status: scaffolding complete, results pending a full training run.**
-> The metric, weighting, calibration, threshold, and probe logic below are
+> **Status: real baseline + EDA done on the actual dataset; DeBERTa training in progress.**
+> The metric, weighting, calibration, threshold, and probe logic are
 > implemented and unit-verified against synthetic data (see `make test`).
-> The tables in this README will be filled in with real numbers once the
-> DeBERTa fine-tune has run on Kaggle/Colab against the actual dataset —
-> see [Status / next steps](#status--next-steps) for exactly what's left.
+> The TF-IDF baseline and EDA below are run against the real 1.8M-row
+> dataset. The DeBERTa fine-tune is running now (Kaggle GPU) — see
+> [Status / next steps](#status--next-steps).
 
-## Results (fill in after training)
+## Results
 
 | Model | Overall AUC | Subgroup AUC (power mean) | BPSN AUC (power mean) | BNSP AUC (power mean) | Final score |
 |---|---|---|---|---|---|
-| TF-IDF + LogisticRegression (baseline) | TBD | TBD | TBD | TBD | TBD |
+| TF-IDF + LogisticRegression (baseline), 200k stratified subsample | 0.930 | 0.827 | 0.802 | 0.932 | 0.873 |
 | DeBERTa-v3-base, single head, no weighting | TBD | TBD | TBD | TBD | TBD |
 | DeBERTa-v3-base, multi-task heads, metric-derived weighting (final) | TBD | TBD | TBD | TBD | TBD |
+
+The baseline already shows exactly the failure mode this project is about:
+overall AUC (0.930) looks solid, but BPSN's power-mean drops to 0.802 —
+worst on `muslim` (0.743) and `black` (0.750), the two subgroups the EDA
+below shows have the most elevated toxic base rates in training data.
+That's not a coincidence: the model has learned some of that correlation
+as a shortcut. Full per-subgroup table: `reports/baseline_tfidf_per_subgroup.csv`.
 
 **Counterfactual probe (before vs. after mitigation):** _bar chart goes here_
 — mean toxicity score per identity term across 20 neutral templates
@@ -47,31 +54,57 @@ headline AUC.
 ## The dataset
 
 [Jigsaw Unintended Bias in Toxicity Classification](https://www.kaggle.com/c/jigsaw-unintended-bias-in-toxicity-classification)
-(Kaggle, 2019), sourced from the Civil Comments platform. ~1.80M training
-rows.
+(Kaggle, 2019), sourced from the Civil Comments platform. **1,804,874**
+training rows (real count, `notebooks/01_eda_spark.ipynb`).
 
 - **`target`** is a *fraction*, not a label — the proportion of human
   raters who marked the comment toxic. We train against this soft value
   directly (BCE against the raw fraction, not a binarized 0/1) and only
   binarize at ≥ 0.5 for evaluation, since that's free signal most public
-  kernels throw away.
-- **Identity annotations exist on ~450k of the 1.80M rows only** (the rest
-  are NaN). All subgroup-level measurement in this project is necessarily
-  restricted to that annotated subset; the other 1.35M rows still count as
-  "background" (not-this-identity) in the BPSN/BNSP calculations, which is
-  the correct interpretation — absence of annotation is not evidence of
-  absence of identity, but it's all the evidence we have.
+  kernels throw away. Real overall toxic base rate at that threshold:
+  **8.00%**.
+- **Identity annotations exist on 405,130 of the 1,804,874 rows (22.4%)**
+  (the rest are NaN). All subgroup-level measurement in this project is
+  necessarily restricted to that annotated subset; the other rows still
+  count as "background" (not-this-identity) in the BPSN/BNSP
+  calculations, which is the correct interpretation — absence of
+  annotation is not evidence of absence of identity, but it's all the
+  evidence we have.
 - **Nine subgroups are scored**: `male`, `female`,
   `homosexual_gay_or_lesbian`, `christian`, `jewish`, `muslim`, `black`,
   `white`, `psychiatric_or_mental_illness` — chosen (by the competition,
   not by us) because they have enough annotated examples to score
   reliably. Other identity columns in the raw data (`hindu`, `buddhist`,
   `latino`, ...) are too sparse to score but are kept for error analysis.
+  Real per-subgroup toxic base rates (`reports/subgroup_base_rates.csv`),
+  against the 8.00% overall rate:
+
+  | subgroup | count | toxic base rate |
+  |---|---|---|
+  | black | 14,901 | 31.4% |
+  | homosexual_gay_or_lesbian | 10,997 | 28.4% |
+  | white | 25,082 | 28.1% |
+  | muslim | 21,006 | 22.8% |
+  | psychiatric_or_mental_illness | 4,889 | 21.1% |
+  | jewish | 7,651 | 16.2% |
+  | male | 44,484 | 15.0% |
+  | female | 53,429 | 13.7% |
+  | christian | 40,423 | 9.1% |
+
+  Four subgroups sit at 2.8-4x the overall base rate. This table, on its
+  own, is the first piece of evidence for the whole bias story: any model
+  trained on this data has every incentive to learn "mentions `black` /
+  `homosexual_gay_or_lesbian` / `white` / `muslim`" as a toxicity signal,
+  because in the training distribution it partly is one — just not for
+  the reason a moderation system should be flagging on.
 - **Six auxiliary toxicity subtypes**: `severe_toxicity`, `obscene`,
   `threat`, `insult`, `identity_attack`, `sexual_explicit`. Used as
   auxiliary training targets (see [Multi-task heads](#stage-2-multi-task-auxiliary-heads)).
-- **Length distribution**: _histogram goes here_ (`notebooks/01_eda_spark.ipynb`) —
-  `max_len=220` is chosen to cover ~99% of comments.
+- **Length distribution** (`notebooks/01_eda_spark.ipynb`,
+  `reports/figures/length_distribution.png`): median 202 chars / 47
+  tokens (real deberta-v3-base tokenizer, not char count); p95 = 953
+  chars / 197 tokens. `max_len=220` covers **98.6%** of comments on a
+  50k-row sample — close to, but not quite, the ~99% originally assumed.
 
 ## The metric
 

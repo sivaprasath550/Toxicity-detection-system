@@ -169,9 +169,15 @@ def train(cfg: dict, sample: int | None = None, out_name: str = "model") -> None
                     running_loss = 0.0
 
                 if global_step % tcfg["checkpoint_every_steps"] == 0:
-                    ckpt_path = model_dir / f"{out_name}_step{global_step}.pt"
+                    # Overwrite a single "latest" file rather than one per
+                    # step count -- a disconnect only ever needs the most
+                    # recent checkpoint, and a multi-hour run checkpointing
+                    # every few thousand steps would otherwise write dozens
+                    # of full ~370MB state dicts (a real problem on Kaggle,
+                    # where /kaggle/working has a bounded output size).
+                    ckpt_path = model_dir / f"{out_name}_latest.pt"
                     torch.save(model.state_dict(), ckpt_path)
-                    print(f"checkpoint saved: {ckpt_path}")
+                    print(f"checkpoint saved ({global_step} steps): {ckpt_path}")
 
         # End-of-epoch validation with the real bias metric, not just loss.
         val_scores = run_inference(model, val_loader, device)
