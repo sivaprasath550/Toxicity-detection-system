@@ -28,11 +28,32 @@ below shows have the most elevated toxic base rates in training data.
 That's not a coincidence: the model has learned some of that correlation
 as a shortcut. Full per-subgroup table: `reports/baseline_tfidf_per_subgroup.csv`.
 
-**Counterfactual probe (before vs. after mitigation):** _bar chart goes here_
-— mean toxicity score per identity term across 20 neutral templates
-(`src/bias_probe.py`), e.g. "I am a **gay** man." vs. "I am a **tall** man."
-A large, unexplained gap between an identity term and the control terms is
-the clearest single piece of evidence of learned bias this project produces.
+**Counterfactual probe, TF-IDF baseline** (`src/bias_probe.py`, 20 neutral
+templates × 9 identities + 4 controls, `reports/bias_probe_baseline_summary.csv`) —
+mean predicted toxicity score, identical sentence templates, only the
+identity term changes:
+
+| Identity term | Mean score | vs. control mean (~0.02) |
+|---|---|---|
+| `psychiatric_or_mental_illness` ("mentally ill") | **0.701** | +0.68 |
+| `homosexual_gay_or_lesbian` ("gay") | **0.690** | +0.67 |
+| `black` | 0.385 | +0.37 |
+| `muslim` | 0.351 | +0.33 |
+| `white` | 0.255 | +0.23 |
+| `jewish` | 0.061 | +0.04 |
+| `christian` | 0.050 | +0.03 |
+| `male` | 0.040 | +0.02 |
+| `female` | 0.016 | ~0.00 |
+| controls (`tall`, `vegetarian`, `left-handed`, `bilingual`) | 0.020 | — |
+
+"I am a mentally ill person." and "I am a gay man." score **35x** the
+control-term mean on sentences that are not toxic under any reading. This
+is the single most persuasive number in this README — not because the
+baseline is a bad model in general (0.930 overall AUC), but because it
+shows the model has learned "this identity term" as a toxicity signal on
+sentences where no reasonable annotator would call it toxic. Re-run after
+each mitigation (`reports/bias_probe_*_summary.csv`) to see whether it
+actually closes.
 
 ## Why not just report accuracy or F1@0.5
 
@@ -235,24 +256,39 @@ a stated policy. Instead (`src/thresholds.py`):
 
 | Target precision | Global threshold | Recall | Worst-subgroup precision at this threshold |
 |---|---|---|---|
-| 0.95 (auto-action) | TBD | TBD | TBD |
-| 0.60 (human review) | TBD | TBD | TBD |
+| 0.95 (auto-action) | 0.948 | 0.154 | 0.750 (`white`) |
+| 0.60 (human review) | 0.197 | 0.644 | TBD |
+
+TF-IDF baseline, `reports/baseline_threshold_table_p95.csv` — a weak
+baseline needs a very high cutoff (0.948) to hit 95% precision at all,
+and only catches 15% of real toxicity there. The per-subgroup gap is
+exactly the story: `white` and `male` drop to 75-83% precision at the
+*global* 0.948 threshold despite the global number being 95%. Per-subgroup
+sample sizes on this 10k-row val split are small enough (`psychiatric_or_mental_illness`
+n≈34) that some subgroup numbers are noisy or undefined here (`NaN` in
+the full CSV) — the version worth trusting is the one computed on
+DeBERTa's larger validation split, pending.
 
 ## Bias measurement and mitigation
 
 **Measure.** Full 9-subgroup Subgroup/BPSN/BNSP AUC table for the
-baseline model — _table goes here_. Expect the worst BPSN on `black`,
-`white`, `homosexual_gay_or_lesbian`, and `muslim`: those terms appear
-disproportionately in toxic training comments, so the baseline learns the
-term itself as a toxicity signal.
+baseline model — see [Results](#results) /
+`reports/baseline_tfidf_per_subgroup.csv`. Worst BPSN: `muslim` (0.743),
+`black` (0.750) — exactly the two subgroups whose training-data toxic
+base rate sits well above overall (22.8% and 31.4% vs. 8.0%, see
+[The dataset](#the-dataset)). `homosexual_gay_or_lesbian` and `white` also
+have elevated base rates but scored better on this particular 200k
+subsample's small per-subgroup validation slices (`homosexual_gay_or_lesbian`
+n=62, `white` n=132 — noisy at this size; worth re-checking once the
+full-data DeBERTa run's larger val split is in).
 
 **Demonstrate.** `src/bias_probe.py` builds 20 neutral templates × 9
 identity terms + 4 control terms (180 + 80 sentences) — e.g. "I am a
 {identity} man.", "My friend is {identity}." — and scores all of them.
 None are toxic under any reasonable reading; a well-behaved model should
-score them all low regardless of the identity term. The gap between an
-identity term's mean score and the control-term mean is the headline
-number — _bar chart goes here_.
+score them all low regardless of the identity term. Real result on the
+TF-IDF baseline — see the table in [Results](#results): `mentally ill`
+and `gay` score ~35x the control-term mean.
 
 **Mitigate**, more than one approach, compared honestly:
 1. Metric-derived reweighting (above)
@@ -274,23 +310,26 @@ is reported rather than dropped from the writeup.
 
 ## Error analysis
 
-~200 errors sampled stratified across high-confidence false positives,
-high-confidence false negatives, and near-threshold cases
-(`notebooks/03_error_analysis.ipynb`), read and clustered into named
-failure modes:
+**Preliminary pass on the TF-IDF baseline** (`reports/baseline_error_sample_for_review.csv`,
+45 stratified errors sampled, 24 read in detail so far) — a full ~200-row
+pass belongs on the final DeBERTa model once trained, but the baseline
+already surfaces the literature-typical failure modes, with real examples:
 
-| Failure mode | Count | Example | What we'd do about it |
+| Failure mode | Count (of 24 read) | Example | What we'd do about it |
 |---|---|---|---|
-| Reclaimed slurs / in-group speech | TBD | TBD | TBD |
-| Quoted toxicity (reporting abuse gets flagged) | TBD | TBD | TBD |
-| Sarcasm / irony | TBD | TBD | TBD |
-| Counter-speech (arguing against racism flagged as racism) | TBD | TBD | TBD |
-| Label noise / annotator disagreement | TBD | TBD | TBD |
-| Politics-as-toxicity | TBD | TBD | TBD |
+| Politics-as-toxicity | 7 | *"unlike Obama inviting... Black Lives Matter... won't be inviting white supremacist David Duke"* scored 0.71 non-toxic; harsh-but-legitimate political jabs ("Another liar?") scored high | Needs a held-out eval slice of political comments specifically, not just aggregate AUC — this is where a moderation system loses public trust fastest |
+| Identity-term false positive | 1 (but *the* headline mode — see the counterfactual probe above) | Same example as above: "black supremacist"/"white supremacist" pushed the score to 0.71 despite target=0.0 | This is what metric-derived weighting + multi-task heads directly target; see Bias measurement section |
+| Subtle insult missed | 4 | *"you have a morality deficit... you're functionally illiterate"* scored 0.066 (target 0.59); *"you're a mess... Scheisse"* scored 0.097 | TF-IDF has no semantic understanding of politeness-toned insults or non-English profanity; expect the transformer to close most of this gap |
+| Quoted toxicity | 1 | *"Wow, interesting deflection. Were you not the person that said 'Failed businessman, serial liar, racist, misogynist...'? Isn't that name calling?"* scored 0.853 — flagged for the quote it's criticizing | Needs quotation/attribution-aware features; a known hard problem, not solved here |
+| Counter-speech | 1 | *"CE reminds us once again how ugly racism is..."* scored 0.889 — flagged for describing racism while condemning it | Same shortcut as identity-term FPs: "racism" the word, not racism the act |
+| Sarcasm / tone misread | 1 | *"Holy crap! You are amaze! Such fun!"* scored 0.966 — enthusiastic, not toxic | Hard problem in general; multi-task aux heads may help distinguish "obscene-shaped" from actually obscene |
 
-If a meaningful fraction of "errors" turn out to be annotation
-disagreements rather than model mistakes, that's reported explicitly — it
-lowers the model's real ceiling and is worth saying out loud.
+Cross-checked against `flag_likely_label_noise` (a heuristic for "model
+confident, raters split") on the full 10k-row baseline validation split:
+**1.9% (188/10,000)** flagged — a real but modest ceiling-lowering effect,
+not the dominant source of error at this stage. Re-run on the DeBERTa
+predictions once available; a stronger model raises this heuristic's
+signal-to-noise.
 
 ## Where Spark fits (and where it doesn't)
 

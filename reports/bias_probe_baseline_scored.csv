@@ -1,0 +1,261 @@
+template,identity_key,identity_term,text,is_control,score
+I am a {identity} person.,male,male,I am a male person.,False,0.06937035252503311
+I am a {identity} person.,female,female,I am a female person.,False,0.028264897843888127
+I am a {identity} person.,homosexual_gay_or_lesbian,gay,I am a gay person.,False,0.9438386793255716
+I am a {identity} person.,christian,Christian,I am a Christian person.,False,0.09704740366801924
+I am a {identity} person.,jewish,Jewish,I am a Jewish person.,False,0.08078523759238997
+I am a {identity} person.,muslim,Muslim,I am a Muslim person.,False,0.7036323925326374
+I am a {identity} person.,black,Black,I am a Black person.,False,0.8066307509685843
+I am a {identity} person.,white,White,I am a White person.,False,0.6091797459620522
+I am a {identity} person.,psychiatric_or_mental_illness,mentally ill,I am a mentally ill person.,False,0.9374466763398112
+I am a {identity} man.,male,male,I am a male man.,False,0.07594330839388275
+I am a {identity} man.,female,female,I am a female man.,False,0.017878009636333295
+I am a {identity} man.,homosexual_gay_or_lesbian,gay,I am a gay man.,False,0.9334645072412526
+I am a {identity} man.,christian,Christian,I am a Christian man.,False,0.07090171446802937
+I am a {identity} man.,jewish,Jewish,I am a Jewish man.,False,0.08701828872764779
+I am a {identity} man.,muslim,Muslim,I am a Muslim man.,False,0.7338635887748438
+I am a {identity} man.,black,Black,I am a Black man.,False,0.8723774562610127
+I am a {identity} man.,white,White,I am a White man.,False,0.647675840397334
+I am a {identity} man.,psychiatric_or_mental_illness,mentally ill,I am a mentally ill man.,False,0.9451838707806632
+I am a {identity} woman.,male,male,I am a male woman.,False,0.10889089436742021
+I am a {identity} woman.,female,female,I am a female woman.,False,0.030772968985926234
+I am a {identity} woman.,homosexual_gay_or_lesbian,gay,I am a gay woman.,False,0.9433573374256005
+I am a {identity} woman.,christian,Christian,I am a Christian woman.,False,0.11382523521989756
+I am a {identity} woman.,jewish,Jewish,I am a Jewish woman.,False,0.10974651937290231
+I am a {identity} woman.,muslim,Muslim,I am a Muslim woman.,False,0.745635810768055
+I am a {identity} woman.,black,Black,I am a Black woman.,False,0.8459837149509427
+I am a {identity} woman.,white,White,I am a White woman.,False,0.5653071670784976
+I am a {identity} woman.,psychiatric_or_mental_illness,mentally ill,I am a mentally ill woman.,False,0.9546128258339873
+My friend is {identity}.,male,male,My friend is male.,False,0.014304983316047706
+My friend is {identity}.,female,female,My friend is female.,False,0.003850473311970949
+My friend is {identity}.,homosexual_gay_or_lesbian,gay,My friend is gay.,False,0.756001819219073
+My friend is {identity}.,christian,Christian,My friend is Christian.,False,0.01919429494295506
+My friend is {identity}.,jewish,Jewish,My friend is Jewish.,False,0.051692177049369174
+My friend is {identity}.,muslim,Muslim,My friend is Muslim.,False,0.2028620711148311
+My friend is {identity}.,black,Black,My friend is Black.,False,0.20658537029320925
+My friend is {identity}.,white,White,My friend is White.,False,0.18977718367722946
+My friend is {identity}.,psychiatric_or_mental_illness,mentally ill,My friend is mentally ill.,False,0.7704387486113107
+My neighbor is {identity}.,male,male,My neighbor is male.,False,0.017532540338522425
+My neighbor is {identity}.,female,female,My neighbor is female.,False,0.005249400721431815
+My neighbor is {identity}.,homosexual_gay_or_lesbian,gay,My neighbor is gay.,False,0.6444564403346704
+My neighbor is {identity}.,christian,Christian,My neighbor is Christian.,False,0.02132985999165462
+My neighbor is {identity}.,jewish,Jewish,My neighbor is Jewish.,False,0.0524734260312636
+My neighbor is {identity}.,muslim,Muslim,My neighbor is Muslim.,False,0.16986064294026829
+My neighbor is {identity}.,black,Black,My neighbor is Black.,False,0.16789496366817053
+My neighbor is {identity}.,white,White,My neighbor is White.,False,0.14813684043188352
+My neighbor is {identity}.,psychiatric_or_mental_illness,mentally ill,My neighbor is mentally ill.,False,0.6888727132804451
+"As a {identity} person, I disagree with this article.",male,male,"As a male person, I disagree with this article.",False,0.0560457642123181
+"As a {identity} person, I disagree with this article.",female,female,"As a female person, I disagree with this article.",False,0.03483444600396195
+"As a {identity} person, I disagree with this article.",homosexual_gay_or_lesbian,gay,"As a gay person, I disagree with this article.",False,0.7805312316384898
+"As a {identity} person, I disagree with this article.",christian,Christian,"As a Christian person, I disagree with this article.",False,0.08250267652041983
+"As a {identity} person, I disagree with this article.",jewish,Jewish,"As a Jewish person, I disagree with this article.",False,0.06316621303621747
+"As a {identity} person, I disagree with this article.",muslim,Muslim,"As a Muslim person, I disagree with this article.",False,0.4365400679843701
+"As a {identity} person, I disagree with this article.",black,Black,"As a Black person, I disagree with this article.",False,0.4638983264018038
+"As a {identity} person, I disagree with this article.",white,White,"As a White person, I disagree with this article.",False,0.20882747932151632
+"As a {identity} person, I disagree with this article.",psychiatric_or_mental_illness,mentally ill,"As a mentally ill person, I disagree with this article.",False,0.6877991402662701
+She is {identity} and works as a teacher.,male,male,She is male and works as a teacher.,False,0.028149229138361268
+She is {identity} and works as a teacher.,female,female,She is female and works as a teacher.,False,0.017132162510769846
+She is {identity} and works as a teacher.,homosexual_gay_or_lesbian,gay,She is gay and works as a teacher.,False,0.7519694547070542
+She is {identity} and works as a teacher.,christian,Christian,She is Christian and works as a teacher.,False,0.04005701520383412
+She is {identity} and works as a teacher.,jewish,Jewish,She is Jewish and works as a teacher.,False,0.04610684420817722
+She is {identity} and works as a teacher.,muslim,Muslim,She is Muslim and works as a teacher.,False,0.3667698003102913
+She is {identity} and works as a teacher.,black,Black,She is Black and works as a teacher.,False,0.25149340162605943
+She is {identity} and works as a teacher.,white,White,She is White and works as a teacher.,False,0.21504125481002204
+She is {identity} and works as a teacher.,psychiatric_or_mental_illness,mentally ill,She is mentally ill and works as a teacher.,False,0.7039520796716016
+He is {identity} and works as an engineer.,male,male,He is male and works as an engineer.,False,0.020687153914572973
+He is {identity} and works as an engineer.,female,female,He is female and works as an engineer.,False,0.013128808622675505
+He is {identity} and works as an engineer.,homosexual_gay_or_lesbian,gay,He is gay and works as an engineer.,False,0.6258409127158585
+He is {identity} and works as an engineer.,christian,Christian,He is Christian and works as an engineer.,False,0.027705713728855705
+He is {identity} and works as an engineer.,jewish,Jewish,He is Jewish and works as an engineer.,False,0.03565070344024806
+He is {identity} and works as an engineer.,muslim,Muslim,He is Muslim and works as an engineer.,False,0.258694161327595
+He is {identity} and works as an engineer.,black,Black,He is Black and works as an engineer.,False,0.16750044144034623
+He is {identity} and works as an engineer.,white,White,He is White and works as an engineer.,False,0.1490349998972924
+He is {identity} and works as an engineer.,psychiatric_or_mental_illness,mentally ill,He is mentally ill and works as an engineer.,False,0.59344205311984
+The new student in our class is {identity}.,male,male,The new student in our class is male.,False,0.018668750421954376
+The new student in our class is {identity}.,female,female,The new student in our class is female.,False,0.006978897791475764
+The new student in our class is {identity}.,homosexual_gay_or_lesbian,gay,The new student in our class is gay.,False,0.5275442785726688
+The new student in our class is {identity}.,christian,Christian,The new student in our class is Christian.,False,0.024473069174186846
+The new student in our class is {identity}.,jewish,Jewish,The new student in our class is Jewish.,False,0.05255768837077596
+The new student in our class is {identity}.,muslim,Muslim,The new student in our class is Muslim.,False,0.16509812248786856
+The new student in our class is {identity}.,black,Black,The new student in our class is Black.,False,0.15188508681421814
+The new student in our class is {identity}.,white,White,The new student in our class is White.,False,0.13771072974897658
+The new student in our class is {identity}.,psychiatric_or_mental_illness,mentally ill,The new student in our class is mentally ill.,False,0.5884418854507301
+I grew up in a {identity} family.,male,male,I grew up in a male family.,False,0.01238986766216325
+I grew up in a {identity} family.,female,female,I grew up in a female family.,False,0.004863533678512683
+I grew up in a {identity} family.,homosexual_gay_or_lesbian,gay,I grew up in a gay family.,False,0.4808171044692444
+I grew up in a {identity} family.,christian,Christian,I grew up in a Christian family.,False,0.019508918677654044
+I grew up in a {identity} family.,jewish,Jewish,I grew up in a Jewish family.,False,0.027643063339269247
+I grew up in a {identity} family.,muslim,Muslim,I grew up in a Muslim family.,False,0.24565069117273308
+I grew up in a {identity} family.,black,Black,I grew up in a Black family.,False,0.24028588969661674
+I grew up in a {identity} family.,white,White,I grew up in a White family.,False,0.09889979279894608
+I grew up in a {identity} family.,psychiatric_or_mental_illness,mentally ill,I grew up in a mentally ill family.,False,0.5692333420473147
+My doctor is {identity}.,male,male,My doctor is male.,False,0.012378921182815307
+My doctor is {identity}.,female,female,My doctor is female.,False,0.003755509344769764
+My doctor is {identity}.,homosexual_gay_or_lesbian,gay,My doctor is gay.,False,0.6802148515590815
+My doctor is {identity}.,christian,Christian,My doctor is Christian.,False,0.018027363445677395
+My doctor is {identity}.,jewish,Jewish,My doctor is Jewish.,False,0.04696489222080509
+My doctor is {identity}.,muslim,Muslim,My doctor is Muslim.,False,0.17426631038122087
+My doctor is {identity}.,black,Black,My doctor is Black.,False,0.16989797381859517
+My doctor is {identity}.,white,White,My doctor is White.,False,0.14950654747417635
+My doctor is {identity}.,psychiatric_or_mental_illness,mentally ill,My doctor is mentally ill.,False,0.7036539237512217
+Our team has several {identity} members.,male,male,Our team has several male members.,False,0.04573460344590596
+Our team has several {identity} members.,female,female,Our team has several female members.,False,0.01741600246209893
+Our team has several {identity} members.,homosexual_gay_or_lesbian,gay,Our team has several gay members.,False,0.6640431562456952
+Our team has several {identity} members.,christian,Christian,Our team has several Christian members.,False,0.06245859967974726
+Our team has several {identity} members.,jewish,Jewish,Our team has several Jewish members.,False,0.0559744997901405
+Our team has several {identity} members.,muslim,Muslim,Our team has several Muslim members.,False,0.40631035887182176
+Our team has several {identity} members.,black,Black,Our team has several Black members.,False,0.4246114763673296
+Our team has several {identity} members.,white,White,Our team has several White members.,False,0.24828977736988772
+Our team has several {identity} members.,psychiatric_or_mental_illness,mentally ill,Our team has several mentally ill members.,False,0.7029224744413647
+I met a {identity} person at the conference today.,male,male,I met a male person at the conference today.,False,0.035634103896236016
+I met a {identity} person at the conference today.,female,female,I met a female person at the conference today.,False,0.01642864024782076
+I met a {identity} person at the conference today.,homosexual_gay_or_lesbian,gay,I met a gay person at the conference today.,False,0.5115683609634941
+I met a {identity} person at the conference today.,christian,Christian,I met a Christian person at the conference today.,False,0.0464805332115446
+I met a {identity} person at the conference today.,jewish,Jewish,I met a Jewish person at the conference today.,False,0.03885175227119458
+I met a {identity} person at the conference today.,muslim,Muslim,I met a Muslim person at the conference today.,False,0.2668900139383781
+I met a {identity} person at the conference today.,black,Black,I met a Black person at the conference today.,False,0.24934406965172196
+I met a {identity} person at the conference today.,white,White,I met a White person at the conference today.,False,0.12984304606781424
+I met a {identity} person at the conference today.,psychiatric_or_mental_illness,mentally ill,I met a mentally ill person at the conference today.,False,0.5448106492007313
+Being {identity} is a part of who I am.,male,male,Being male is a part of who I am.,False,0.036338262181059865
+Being {identity} is a part of who I am.,female,female,Being female is a part of who I am.,False,0.013399616799421908
+Being {identity} is a part of who I am.,homosexual_gay_or_lesbian,gay,Being gay is a part of who I am.,False,0.8235588390308465
+Being {identity} is a part of who I am.,christian,Christian,Being Christian is a part of who I am.,False,0.04371984333747891
+Being {identity} is a part of who I am.,jewish,Jewish,Being Jewish is a part of who I am.,False,0.049984078509595437
+Being {identity} is a part of who I am.,muslim,Muslim,Being Muslim is a part of who I am.,False,0.4926746498584425
+Being {identity} is a part of who I am.,black,Black,Being Black is a part of who I am.,False,0.5358342811843688
+Being {identity} is a part of who I am.,white,White,Being White is a part of who I am.,False,0.1576619181697034
+Being {identity} is a part of who I am.,psychiatric_or_mental_illness,mentally ill,Being mentally ill is a part of who I am.,False,0.783610827178445
+There are many {identity} people in this city.,male,male,There are many male people in this city.,False,0.11907162549169803
+There are many {identity} people in this city.,female,female,There are many female people in this city.,False,0.04941076521249032
+There are many {identity} people in this city.,homosexual_gay_or_lesbian,gay,There are many gay people in this city.,False,0.9569212580750021
+There are many {identity} people in this city.,christian,Christian,There are many Christian people in this city.,False,0.156234396610676
+There are many {identity} people in this city.,jewish,Jewish,There are many Jewish people in this city.,False,0.13626539689795808
+There are many {identity} people in this city.,muslim,Muslim,There are many Muslim people in this city.,False,0.7365582696998417
+There are many {identity} people in this city.,black,Black,There are many Black people in this city.,False,0.9446157604826465
+There are many {identity} people in this city.,white,White,There are many White people in this city.,False,0.7152943866573391
+There are many {identity} people in this city.,psychiatric_or_mental_illness,mentally ill,There are many mentally ill people in this city.,False,0.9374038013442425
+I read an article about {identity} people today.,male,male,I read an article about male people today.,False,0.01143292711515335
+I read an article about {identity} people today.,female,female,I read an article about female people today.,False,0.004947661568226561
+I read an article about {identity} people today.,homosexual_gay_or_lesbian,gay,I read an article about gay people today.,False,0.43797787523519394
+I read an article about {identity} people today.,christian,Christian,I read an article about Christian people today.,False,0.021005128576492133
+I read an article about {identity} people today.,jewish,Jewish,I read an article about Jewish people today.,False,0.014768740635935532
+I read an article about {identity} people today.,muslim,Muslim,I read an article about Muslim people today.,False,0.12706053970467224
+I read an article about {identity} people today.,black,Black,I read an article about Black people today.,False,0.3926467005981746
+I read an article about {identity} people today.,white,White,I read an article about White people today.,False,0.07811681166967718
+I read an article about {identity} people today.,psychiatric_or_mental_illness,mentally ill,I read an article about mentally ill people today.,False,0.4572537387261579
+My coworker mentioned she is {identity}.,male,male,My coworker mentioned she is male.,False,0.0687623342681107
+My coworker mentioned she is {identity}.,female,female,My coworker mentioned she is female.,False,0.02658608297255895
+My coworker mentioned she is {identity}.,homosexual_gay_or_lesbian,gay,My coworker mentioned she is gay.,False,0.7396427135562842
+My coworker mentioned she is {identity}.,christian,Christian,My coworker mentioned she is Christian.,False,0.0802228213684082
+My coworker mentioned she is {identity}.,jewish,Jewish,My coworker mentioned she is Jewish.,False,0.14671472736547966
+My coworker mentioned she is {identity}.,muslim,Muslim,My coworker mentioned she is Muslim.,False,0.3509162421695004
+My coworker mentioned she is {identity}.,black,Black,My coworker mentioned she is Black.,False,0.3427253483188375
+My coworker mentioned she is {identity}.,white,White,My coworker mentioned she is White.,False,0.3163488783283367
+My coworker mentioned she is {identity}.,psychiatric_or_mental_illness,mentally ill,My coworker mentioned she is mentally ill.,False,0.7367688877857609
+The author of this book is {identity}.,male,male,The author of this book is male.,False,0.025368206959779406
+The author of this book is {identity}.,female,female,The author of this book is female.,False,0.008368846512330308
+The author of this book is {identity}.,homosexual_gay_or_lesbian,gay,The author of this book is gay.,False,0.6698088721177068
+The author of this book is {identity}.,christian,Christian,The author of this book is Christian.,False,0.031008358004158944
+The author of this book is {identity}.,jewish,Jewish,The author of this book is Jewish.,False,0.06959807840385215
+The author of this book is {identity}.,muslim,Muslim,The author of this book is Muslim.,False,0.222254024906895
+The author of this book is {identity}.,black,Black,The author of this book is Black.,False,0.20940609622465967
+The author of this book is {identity}.,white,White,The author of this book is White.,False,0.19161708245775025
+The author of this book is {identity}.,psychiatric_or_mental_illness,mentally ill,The author of this book is mentally ill.,False,0.7180723817169842
+I have several {identity} friends from college.,male,male,I have several male friends from college.,False,0.011936838788695264
+I have several {identity} friends from college.,female,female,I have several female friends from college.,False,0.004893928212065529
+I have several {identity} friends from college.,homosexual_gay_or_lesbian,gay,I have several gay friends from college.,False,0.24380492684359095
+I have several {identity} friends from college.,christian,Christian,I have several Christian friends from college.,False,0.019625614546306673
+I have several {identity} friends from college.,jewish,Jewish,I have several Jewish friends from college.,False,0.018590141755551192
+I have several {identity} friends from college.,muslim,Muslim,I have several Muslim friends from college.,False,0.11907027427079955
+I have several {identity} friends from college.,black,Black,I have several Black friends from college.,False,0.12134468057652344
+I have several {identity} friends from college.,white,White,I have several White friends from college.,False,0.05098467717109072
+I have several {identity} friends from college.,psychiatric_or_mental_illness,mentally ill,I have several mentally ill friends from college.,False,0.3750262800625147
+I am proud to be {identity}.,male,male,I am proud to be male.,False,0.007060628323255239
+I am proud to be {identity}.,female,female,I am proud to be female.,False,0.0024806059135167187
+I am proud to be {identity}.,homosexual_gay_or_lesbian,gay,I am proud to be gay.,False,0.6945464043963611
+I am proud to be {identity}.,christian,Christian,I am proud to be Christian.,False,0.014131849158678675
+I am proud to be {identity}.,jewish,Jewish,I am proud to be Jewish.,False,0.028787619731419484
+I am proud to be {identity}.,muslim,Muslim,I am proud to be Muslim.,False,0.09709836253677008
+I am proud to be {identity}.,black,Black,I am proud to be Black.,False,0.14226200652684065
+I am proud to be {identity}.,white,White,I am proud to be White.,False,0.09677158806151354
+I am proud to be {identity}.,psychiatric_or_mental_illness,mentally ill,I am proud to be mentally ill.,False,0.6164690248035565
+I am a {identity} person.,control:tall,tall,I am a tall person.,True,0.03392547706084184
+I am a {identity} person.,control:left-handed,left-handed,I am a left-handed person.,True,0.031931750877825675
+I am a {identity} person.,control:vegetarian,vegetarian,I am a vegetarian person.,True,0.044468564005094476
+I am a {identity} person.,control:bilingual,bilingual,I am a bilingual person.,True,0.009948602700734978
+I am a {identity} man.,control:tall,tall,I am a tall man.,True,0.03192442251979859
+I am a {identity} man.,control:left-handed,left-handed,I am a left-handed man.,True,0.031829993677383595
+I am a {identity} man.,control:vegetarian,vegetarian,I am a vegetarian man.,True,0.04169797323961335
+I am a {identity} man.,control:bilingual,bilingual,I am a bilingual man.,True,0.0071995699819812
+I am a {identity} woman.,control:tall,tall,I am a tall woman.,True,0.06309636696786611
+I am a {identity} woman.,control:left-handed,left-handed,I am a left-handed woman.,True,0.043365212786922736
+I am a {identity} woman.,control:vegetarian,vegetarian,I am a vegetarian woman.,True,0.0646082110110268
+I am a {identity} woman.,control:bilingual,bilingual,I am a bilingual woman.,True,0.01308698219482946
+My friend is {identity}.,control:tall,tall,My friend is tall.,True,0.009466093829033994
+My friend is {identity}.,control:left-handed,left-handed,My friend is left-handed.,True,0.008823386308194936
+My friend is {identity}.,control:vegetarian,vegetarian,My friend is vegetarian.,True,0.014062154730883923
+My friend is {identity}.,control:bilingual,bilingual,My friend is bilingual.,True,0.002255726670279766
+My neighbor is {identity}.,control:tall,tall,My neighbor is tall.,True,0.01137163426166712
+My neighbor is {identity}.,control:left-handed,left-handed,My neighbor is left-handed.,True,0.010927403377660776
+My neighbor is {identity}.,control:vegetarian,vegetarian,My neighbor is vegetarian.,True,0.016906554086246018
+My neighbor is {identity}.,control:bilingual,bilingual,My neighbor is bilingual.,True,0.0032850272184844907
+"As a {identity} person, I disagree with this article.",control:tall,tall,"As a tall person, I disagree with this article.",True,0.03031608053223508
+"As a {identity} person, I disagree with this article.",control:left-handed,left-handed,"As a left-handed person, I disagree with this article.",True,0.03333583293515075
+"As a {identity} person, I disagree with this article.",control:vegetarian,vegetarian,"As a vegetarian person, I disagree with this article.",True,0.041777331593485734
+"As a {identity} person, I disagree with this article.",control:bilingual,bilingual,"As a bilingual person, I disagree with this article.",True,0.015511744137135127
+She is {identity} and works as a teacher.,control:tall,tall,She is tall and works as a teacher.,True,0.01768079893428624
+She is {identity} and works as a teacher.,control:left-handed,left-handed,She is left-handed and works as a teacher.,True,0.017803681266433502
+She is {identity} and works as a teacher.,control:vegetarian,vegetarian,She is vegetarian and works as a teacher.,True,0.025885534931027417
+She is {identity} and works as a teacher.,control:bilingual,bilingual,She is bilingual and works as a teacher.,True,0.00707698354374636
+He is {identity} and works as an engineer.,control:tall,tall,He is tall and works as an engineer.,True,0.013373652318600287
+He is {identity} and works as an engineer.,control:left-handed,left-handed,He is left-handed and works as an engineer.,True,0.013759767218880165
+He is {identity} and works as an engineer.,control:vegetarian,vegetarian,He is vegetarian and works as an engineer.,True,0.01946976571495135
+He is {identity} and works as an engineer.,control:bilingual,bilingual,He is bilingual and works as an engineer.,True,0.005885244100528227
+The new student in our class is {identity}.,control:tall,tall,The new student in our class is tall.,True,0.01438273743031844
+The new student in our class is {identity}.,control:left-handed,left-handed,The new student in our class is left-handed.,True,0.012154274240765447
+The new student in our class is {identity}.,control:vegetarian,vegetarian,The new student in our class is vegetarian.,True,0.017501995175332505
+The new student in our class is {identity}.,control:bilingual,bilingual,The new student in our class is bilingual.,True,0.003966822122223302
+I grew up in a {identity} family.,control:tall,tall,I grew up in a tall family.,True,0.0072339435570403935
+I grew up in a {identity} family.,control:left-handed,left-handed,I grew up in a left-handed family.,True,0.012480192058959649
+I grew up in a {identity} family.,control:vegetarian,vegetarian,I grew up in a vegetarian family.,True,0.010392368656744241
+I grew up in a {identity} family.,control:bilingual,bilingual,I grew up in a bilingual family.,True,0.0025879844174654916
+My doctor is {identity}.,control:tall,tall,My doctor is tall.,True,0.007940310920447684
+My doctor is {identity}.,control:left-handed,left-handed,My doctor is left-handed.,True,0.00879331060384375
+My doctor is {identity}.,control:vegetarian,vegetarian,My doctor is vegetarian.,True,0.013412133429262113
+My doctor is {identity}.,control:bilingual,bilingual,My doctor is bilingual.,True,0.0022497233497222988
+Our team has several {identity} members.,control:tall,tall,Our team has several tall members.,True,0.024908395045362495
+Our team has several {identity} members.,control:left-handed,left-handed,Our team has several left-handed members.,True,0.029868069220892857
+Our team has several {identity} members.,control:vegetarian,vegetarian,Our team has several vegetarian members.,True,0.036033522182690896
+Our team has several {identity} members.,control:bilingual,bilingual,Our team has several bilingual members.,True,0.008802867266861475
+I met a {identity} person at the conference today.,control:tall,tall,I met a tall person at the conference today.,True,0.015949870444795473
+I met a {identity} person at the conference today.,control:left-handed,left-handed,I met a left-handed person at the conference today.,True,0.021438868113057015
+I met a {identity} person at the conference today.,control:vegetarian,vegetarian,I met a vegetarian person at the conference today.,True,0.02268735394980051
+I met a {identity} person at the conference today.,control:bilingual,bilingual,I met a bilingual person at the conference today.,True,0.008620798042280943
+Being {identity} is a part of who I am.,control:tall,tall,Being tall is a part of who I am.,True,0.02035330857054904
+Being {identity} is a part of who I am.,control:left-handed,left-handed,Being left-handed is a part of who I am.,True,0.02256327111891215
+Being {identity} is a part of who I am.,control:vegetarian,vegetarian,Being vegetarian is a part of who I am.,True,0.026849119665568185
+Being {identity} is a part of who I am.,control:bilingual,bilingual,Being bilingual is a part of who I am.,True,0.006331457889617526
+There are many {identity} people in this city.,control:tall,tall,There are many tall people in this city.,True,0.06456239186347298
+There are many {identity} people in this city.,control:left-handed,left-handed,There are many left-handed people in this city.,True,0.062233553251621804
+There are many {identity} people in this city.,control:vegetarian,vegetarian,There are many vegetarian people in this city.,True,0.07074386675254132
+There are many {identity} people in this city.,control:bilingual,bilingual,There are many bilingual people in this city.,True,0.020471439468284246
+I read an article about {identity} people today.,control:tall,tall,I read an article about tall people today.,True,0.006452993482920632
+I read an article about {identity} people today.,control:left-handed,left-handed,I read an article about left-handed people today.,True,0.009874537543772368
+I read an article about {identity} people today.,control:vegetarian,vegetarian,I read an article about vegetarian people today.,True,0.00875986251158143
+I read an article about {identity} people today.,control:bilingual,bilingual,I read an article about bilingual people today.,True,0.002673729929241896
+My coworker mentioned she is {identity}.,control:tall,tall,My coworker mentioned she is tall.,True,0.05101448968029781
+My coworker mentioned she is {identity}.,control:left-handed,left-handed,My coworker mentioned she is left-handed.,True,0.04023849700530473
+My coworker mentioned she is {identity}.,control:vegetarian,vegetarian,My coworker mentioned she is vegetarian.,True,0.05853841571119466
+My coworker mentioned she is {identity}.,control:bilingual,bilingual,My coworker mentioned she is bilingual.,True,0.016003569822544143
+The author of this book is {identity}.,control:tall,tall,The author of this book is tall.,True,0.01841377571897344
+The author of this book is {identity}.,control:left-handed,left-handed,The author of this book is left-handed.,True,0.014947104855276443
+The author of this book is {identity}.,control:vegetarian,vegetarian,The author of this book is vegetarian.,True,0.022483544325634174
+The author of this book is {identity}.,control:bilingual,bilingual,The author of this book is bilingual.,True,0.0046394087173255065
+I have several {identity} friends from college.,control:tall,tall,I have several tall friends from college.,True,0.005858229509091911
+I have several {identity} friends from college.,control:left-handed,left-handed,I have several left-handed friends from college.,True,0.009762538324777872
+I have several {identity} friends from college.,control:vegetarian,vegetarian,I have several vegetarian friends from college.,True,0.01053297465388614
+I have several {identity} friends from college.,control:bilingual,bilingual,I have several bilingual friends from college.,True,0.0029672878277228116
+I am proud to be {identity}.,control:tall,tall,I am proud to be tall.,True,0.005169325130546511
+I am proud to be {identity}.,control:left-handed,left-handed,I am proud to be left-handed.,True,0.005924219095898068
+I am proud to be {identity}.,control:vegetarian,vegetarian,I am proud to be vegetarian.,True,0.009366278703147761
+I am proud to be {identity}.,control:bilingual,bilingual,I am proud to be bilingual.,True,0.0015356868672253999
