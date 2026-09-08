@@ -1,0 +1,27 @@
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+# Data (never committed — large, and Kaggle's terms don't permit
+# redistribution; README explains how to fetch it)
+data/raw/*
+data/processed/*
+!data/raw/.gitkeep
+!data/processed/.gitkeep
+
+# Model artifacts (large; keep the repo git-friendly)
+models/*
+!models/.gitkeep
+*.pt
+*.pkl
+*.bin
+*.safetensors
+
+# Kaggle credentials — never commit these
+kaggle.json
+.kaggle/
+
+.env
+.venv/
+venv/
+.DS_Store

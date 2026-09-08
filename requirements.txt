@@ -1,0 +1,41 @@
+# Versions below are pinned to what was actually installed and verified
+# (`make test`, the FastAPI demo, the Spark EDA notebook, a CPU structural
+# run of the training loop) in this project's dev environment -- not
+# aspirational pins. If you're setting this up fresh and pip resolves
+# something newer, that's fine; these are a known-good baseline.
+
+# Core (usable locally, CPU-only)
+pandas==2.3.3
+numpy==2.3.4
+scikit-learn==1.7.2
+matplotlib==3.10.7
+pyyaml==6.0.2
+scipy==1.16.3
+
+# Modeling (heavy — install where GPU is available: Kaggle/Colab, or
+# locally with `pip install -r requirements.txt` if you don't mind the
+# download; training itself needs CUDA to be practical, see README)
+torch==2.9.0
+transformers==5.16.1
+accelerate==1.14.0
+sentencepiece==0.2.0
+
+# Big-data / EDA at scale. On Windows, PySpark additionally needs a JVM
+# (Java 17+) and Hadoop's winutils.exe/hadoop.dll shims on PATH for local
+# filesystem I/O -- see README "Where Spark fits" for exactly what this
+# repo's dev machine needed (neither ships via pip).
+pyspark==4.2.0
+
+# Demo service
+fastapi==0.115.0
+uvicorn==0.30.6
+pydantic==2.13.3
+httpx==0.28.1   # only needed for TestClient-based smoke testing of app/main.py
+
+# Notebooks
+jupyter==1.1.1
+ipykernel==7.3.0
+nbconvert==7.17.1
+
+# Dataset download (requires a Kaggle account + API token, see README)
+kaggle==1.6.17
